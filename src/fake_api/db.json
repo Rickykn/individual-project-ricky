@@ -50,15 +50,18 @@
     "users":[
         {
             "id": 1,
-            "username":"Galang"
+            "username":"Galang",
+            "password": "password"
         },
         {
             "id": 2,
-            "username":"Wildan"
+            "username":"Wildan",
+            "password": "password"
         },
         {
             "id": 3,
-            "username":"Rangin"
+            "username":"Rangin",
+            "password": "password"
         }
     ]
 }

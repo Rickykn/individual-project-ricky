@@ -10,17 +10,43 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
+import { axiosInstance } from "../../configs/api";
+import { useDispatch } from "react-redux";
+import auth_types from "../../redux/types/auth";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+
+  const loginHandleBtn = async (values) => {
+    try {
+      const res = await axiosInstance.get("/users", {
+        params: {
+          username: values.username,
+          password: values.password,
+        },
+      });
+
+      console.log(res.data[0]);
+
+      if (res.data.length) {
+        dispatch({
+          type: auth_types.LOGIN_USER,
+          payload: {
+            id: res.data[0].id,
+            username: res.data[0].username,
+          },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
-      formik.setFieldValue("password", "");
-    },
+    onSubmit: loginHandleBtn,
   });
   return (
     <Flex minHeight="90vh" align="center" justifyContent="center">

@@ -1,8 +1,11 @@
 import { Text, Box, Avatar, Icon, Button } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
+  const authSelector = useSelector((state) => state.auth);
+
   return (
     <Box
       display="flex"
@@ -32,7 +35,7 @@ const Navbar = () => {
           <Box display="inline-flex" alignItems="center">
             <Avatar src="https://bit.ly/dan-abramov" size="sm" />
             <Box paddingX="3">
-              <Text fontSize="sm">Username</Text>
+              <Text fontSize="sm">{authSelector.username}</Text>
             </Box>
           </Box>
         </Link>
