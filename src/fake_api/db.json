@@ -1,0 +1,64 @@
+{
+    "posts":[
+        {
+            "userId":2,
+            "location": "BSD",
+            "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+            "number_of_likes": 213424,
+            "caption": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero dolore enim praesentium inventore asperiores sunt corporis unde dicta ipsa dolorum voluptatibus dolor, odio nobis est consequuntur labore!",
+            "id": 1
+        },
+        {
+            "userId":1,
+            "location": "Rawa Kucing",
+            "image_url": "https://i.pinimg.com/564x/5c/cc/43/5ccc43264b153d66981f76126e233e5f.jpg",
+            "number_of_likes": 12,
+            "caption": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero dolore enim praesentium inventore asperiores sunt corporis unde dicta ipsa dolorum voluptatibus dolor,",
+            "id": 2
+        },
+        {
+            "userId":3,
+            "location": "PDK",
+            "image_url": "https://images.unsplash.com/photo-1644982648600-4583461837f8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1724&q=80",
+            "number_of_likes": 120,
+            "caption": "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+            "id": 3
+        }
+    ],
+
+    "comments": [
+        {
+          "id": 1,
+          "userId": 1,
+          "content": "Haloooo",
+          "postId": 1
+        },
+        {
+            "id": 2,
+            "userId": 2,
+            "content": "mantap",
+            "postId": 3
+          },
+          {
+            "id": 3,
+            "userId": 3,
+            "content": "test",
+            "postId": 3
+          }
+      ],
+
+    "users":[
+        {
+            "id": 1,
+            "username":"Galang"
+        },
+        {
+            "id": 2,
+            "username":"Wildan"
+        },
+        {
+            "id": 3,
+            "username":"Rangin"
+        }
+    ]
+}
