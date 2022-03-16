@@ -1,4 +1,14 @@
-import { Text, Box, Avatar, Icon, Button } from "@chakra-ui/react";
+import {
+  Text,
+  Box,
+  Avatar,
+  Icon,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,14 +41,23 @@ const Navbar = () => {
         <Button marginRight="5" colorScheme="blue" variant="outline" size="sm">
           New Post
         </Button>
-        <Link href="/profile">
-          <Box display="inline-flex" alignItems="center">
-            <Avatar src="https://bit.ly/dan-abramov" size="sm" />
-            <Box paddingX="3">
-              <Text fontSize="sm">{authSelector.username}</Text>
+        <Menu>
+          <MenuButton>
+            <Box display="inline-flex" alignItems="center">
+              <Avatar src="https://bit.ly/dan-abramov" size="sm" />
+              <Box paddingX="3">
+                <Text fontSize="sm">{authSelector.username}</Text>
+              </Box>
             </Box>
-          </Box>
-        </Link>
+          </MenuButton>
+          <MenuList>
+            <Link href="/profile">
+              <MenuItem>View Profile</MenuItem>
+            </Link>
+
+            <MenuItem>Logout</MenuItem>
+          </MenuList>
+        </Menu>
       </Box>
     </Box>
   );
