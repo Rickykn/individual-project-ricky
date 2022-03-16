@@ -8,14 +8,19 @@ import {
   Stack,
   Link as ChakraLink,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { axiosInstance } from "../../configs/api";
 import { useDispatch } from "react-redux";
 import auth_types from "../../redux/types/auth";
+import Router from "next/router";
+import jsCookie from "js-cookie";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+
+  const toast = useToast();
 
   const loginHandleBtn = async (values) => {
     try {
@@ -37,8 +42,19 @@ const LoginPage = () => {
           },
         });
       }
+
+      const userData = res.data[0];
+      const stringifiedUserData = JSON.stringify(userData);
+      jsCookie.set("user_data", stringifiedUserData);
+
+      Router.push("/home");
     } catch (err) {
-      console.log(err);
+      toast({
+        status: "error",
+        title: "Server error",
+        description: err.message,
+        duration: 2000,
+      });
     }
   };
   const formik = useFormik({
