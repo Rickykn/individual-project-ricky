@@ -3,8 +3,9 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
 import { axiosInstance } from "../../configs/api";
+import requiresAuth from "../../lib/requiresAuth";
 
-const HomePage = () => {
+const HomePage = ({ user }) => {
   const [contentList, setContentList] = useState([]);
   const toast = useToast();
 
@@ -52,5 +53,15 @@ const HomePage = () => {
 
   return <Box>{renderContentList()}</Box>;
 };
+
+export const getServerSideProps = requiresAuth((context) => {
+  const userData = context.req.cookies.user_data;
+
+  return {
+    props: {
+      user: userData,
+    },
+  };
+});
 
 export default HomePage;

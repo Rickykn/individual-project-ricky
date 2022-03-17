@@ -47,7 +47,7 @@ const LoginPage = () => {
       const stringifiedUserData = JSON.stringify(userData);
       jsCookie.set("user_data", stringifiedUserData);
 
-      Router.push("/home");
+      Router.push("/posts");
     } catch (err) {
       toast({
         status: "error",

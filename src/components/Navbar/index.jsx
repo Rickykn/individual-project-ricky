@@ -12,9 +12,23 @@ import {
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import auth_types from "../../redux/types/auth";
+import jsCookie from "js-cookie";
+import Router from "next/router";
 
 const Navbar = () => {
   const authSelector = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const logoutHandlerBtn = () => {
+    dispatch({
+      type: auth_types.LOGOUT_USER,
+    });
+
+    jsCookie.remove("user_data");
+
+    Router.push("/login");
+  };
 
   return (
     <Box
@@ -31,7 +45,7 @@ const Navbar = () => {
       background="white"
       boxShadow="dark-lg"
     >
-      <Link href="/">
+      <Link href="/posts">
         <Box>
           <Icon boxSize={6} as={FaHome} />
         </Box>
@@ -55,7 +69,7 @@ const Navbar = () => {
               <MenuItem>View Profile</MenuItem>
             </Link>
 
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={logoutHandlerBtn}>Logout</MenuItem>
           </MenuList>
         </Menu>
       </Box>
