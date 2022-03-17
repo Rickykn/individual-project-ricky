@@ -39,6 +39,7 @@ const LoginPage = () => {
           payload: {
             id: res.data[0].id,
             username: res.data[0].username,
+            avatar: res.data[0].avatar,
           },
         });
       }

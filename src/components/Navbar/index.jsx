@@ -47,32 +47,45 @@ const Navbar = () => {
     >
       <Link href="/posts">
         <Box>
-          <Icon boxSize={6} as={FaHome} />
+          <Icon
+            boxSize={6}
+            as={FaHome}
+            sx={{
+              _hover: {
+                cursor: "pointer",
+              },
+            }}
+          />
         </Box>
       </Link>
-
-      <Box display="inline-flex" alignItems="center">
-        <Button marginRight="5" colorScheme="blue" variant="outline" size="sm">
-          New Post
-        </Button>
-        <Menu>
-          <MenuButton>
-            <Box display="inline-flex" alignItems="center">
-              <Avatar src="https://bit.ly/dan-abramov" size="sm" />
-              <Box paddingX="3">
-                <Text fontSize="sm">{authSelector.username}</Text>
+      {authSelector.id ? (
+        <Box display="inline-flex" alignItems="center">
+          <Button
+            marginRight="5"
+            colorScheme="blue"
+            variant="outline"
+            size="sm"
+          >
+            New Post
+          </Button>
+          <Menu>
+            <MenuButton>
+              <Box display="inline-flex" alignItems="center">
+                <Avatar src={authSelector.avatar} size="sm" />
+                <Box paddingX="3">
+                  <Text fontSize="sm">{authSelector.username}</Text>
+                </Box>
               </Box>
-            </Box>
-          </MenuButton>
-          <MenuList>
-            <Link href="/profile">
-              <MenuItem>View Profile</MenuItem>
-            </Link>
-
-            <MenuItem onClick={logoutHandlerBtn}>Logout</MenuItem>
-          </MenuList>
-        </Menu>
-      </Box>
+            </MenuButton>
+            <MenuList>
+              <Link href="/profile">
+                <MenuItem>View Profile</MenuItem>
+              </Link>
+              <MenuItem onClick={logoutHandlerBtn}>Logout</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+      ) : null}
     </Box>
   );
 };
