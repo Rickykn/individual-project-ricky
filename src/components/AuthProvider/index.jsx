@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import auth_types from "../../redux/types/auth";
 
 const AuthProvider = ({ children }) => {
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,13 +17,7 @@ const AuthProvider = ({ children }) => {
         payload: parseUserData,
       });
     }
-
-    setIsAuthChecked(true);
   }, []);
-
-  if (!isAuthChecked) {
-    return <div>Loading...</div>;
-  }
 
   return children;
 };

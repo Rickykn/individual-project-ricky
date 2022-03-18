@@ -78,14 +78,18 @@ const Navbar = () => {
               </Box>
             </MenuButton>
             <MenuList>
-              <Link href="/profile">
-                <MenuItem>View Profile</MenuItem>
+              <Link href="/myprofile">
+                <MenuItem>My Profile</MenuItem>
               </Link>
               <MenuItem onClick={logoutHandlerBtn}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </Box>
-      ) : null}
+      ) : (
+        <Link href="/login">
+          <Button>Login</Button>
+        </Link>
+      )}
     </Box>
   );
 };

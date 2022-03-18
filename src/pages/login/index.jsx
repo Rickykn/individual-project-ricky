@@ -9,6 +9,10 @@ import {
   Link as ChakraLink,
   Button,
   useToast,
+  InputGroup,
+  InputRightElement,
+  Icon,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { axiosInstance } from "../../configs/api";
@@ -16,11 +20,15 @@ import { useDispatch } from "react-redux";
 import auth_types from "../../redux/types/auth";
 import Router from "next/router";
 import jsCookie from "js-cookie";
+import * as Yup from "yup";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { useState } from "react";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
 
   const toast = useToast();
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const loginHandleBtn = async (values) => {
     try {
@@ -31,7 +39,9 @@ const LoginPage = () => {
         },
       });
 
-      console.log(res.data[0]);
+      if (!res.data.length) {
+        throw new Error("User not found");
+      }
 
       if (res.data.length) {
         dispatch({
@@ -52,7 +62,7 @@ const LoginPage = () => {
     } catch (err) {
       toast({
         status: "error",
-        title: "Server error",
+        title: "Login Failed",
         description: err.message,
         duration: 2000,
       });
@@ -63,6 +73,11 @@ const LoginPage = () => {
       username: "",
       password: "",
     },
+    validationSchema: Yup.object().shape({
+      username: Yup.string().required("This field is required"),
+      password: Yup.string().required("This field is required"),
+    }),
+    validateOnChange: false,
     onSubmit: loginHandleBtn,
   });
   return (
@@ -82,10 +97,11 @@ const LoginPage = () => {
           </Box>
           <Box my={8} textAlign="center">
             <form>
-              <FormControl>
+              <FormControl isInvalid={formik.errors.username}>
                 <FormLabel htmlFor="inputUsername">
                   Email address or Username
                 </FormLabel>
+
                 <Input
                   onChange={(event) =>
                     formik.setFieldValue("username", event.target.value)
@@ -95,20 +111,34 @@ const LoginPage = () => {
                   name="username"
                   value={formik.values.username}
                 />
+                <FormHelperText>{formik.errors.username}</FormHelperText>
               </FormControl>
 
-              <FormControl mt={5}>
+              <FormControl mt={5} isInvalid={formik.errors.password}>
                 <FormLabel htmlFor="inputPassword">password</FormLabel>
-                <Input
-                  onChange={(event) =>
-                    formik.setFieldValue("password", event.target.value)
-                  }
-                  id="inputPassword"
-                  type="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  value={formik.values.password}
-                />
+                <InputGroup>
+                  <Input
+                    onChange={(event) =>
+                      formik.setFieldValue("password", event.target.value)
+                    }
+                    id="inputPassword"
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formik.values.password}
+                  />
+                  <InputRightElement
+                    children={
+                      <Icon
+                        fontSize="xl"
+                        onClick={() => setPasswordVisible(!passwordVisible)}
+                        as={passwordVisible ? IoMdEyeOff : IoMdEye}
+                        sx={{ _hover: { cursor: "pointer" } }}
+                      ></Icon>
+                    }
+                  ></InputRightElement>
+                </InputGroup>
+                <FormHelperText>{formik.errors.password}</FormHelperText>
               </FormControl>
 
               <Stack isInline justifyContent="space-between" mt={5}>
