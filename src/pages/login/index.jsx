@@ -16,16 +16,19 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { axiosInstance } from "../../configs/api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import auth_types from "../../redux/types/auth";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import jsCookie from "js-cookie";
 import * as Yup from "yup";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+
+  const authSelector = useSelector((state) => state.auth);
+  const Router = useRouter();
 
   const toast = useToast();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -59,6 +62,7 @@ const LoginPage = () => {
       jsCookie.set("user_data", stringifiedUserData);
 
       Router.push("/posts");
+      formik.setSubmitting(false);
     } catch (err) {
       toast({
         status: "error",
@@ -66,6 +70,7 @@ const LoginPage = () => {
         description: err.message,
         duration: 2000,
       });
+      formik.setSubmitting(false);
     }
   };
   const formik = useFormik({
@@ -80,6 +85,12 @@ const LoginPage = () => {
     validateOnChange: false,
     onSubmit: loginHandleBtn,
   });
+
+  useEffect(() => {
+    if (authSelector.id) {
+      Router.push("/posts");
+    }
+  }, [authSelector.id]);
   return (
     <Flex minHeight="90vh" align="center" justifyContent="center">
       <Box
@@ -153,6 +164,7 @@ const LoginPage = () => {
                 mt={4}
                 colorScheme="blue"
                 type="submit"
+                disabled={formik.isSubmitting}
               >
                 Sign In
               </Button>
