@@ -52,19 +52,25 @@
             "id": 1,
             "username":"Galang",
             "avatar": "https://bit.ly/dan-abramov",
-            "password": "password"
+            "password": "password",
+            "bio": "mantap",
+            "full_name": "Galang kurus"
         },
         {
             "id": 2,
             "username":"Wildan",
             "avatar": "https://bit.ly/dan-abramov",
-            "password": "password"
+            "password": "password",
+            "bio": "mantap1",
+            "full_name": "Wildan cangak"
         },
         {
             "id": 3,
             "username":"Rangin",
             "avatar": "https://bit.ly/dan-abramov",
-            "password": "password"
+            "password": "password",
+            "bio": "mantap2",
+            "full_name": "Wildan cangak"
         }
     ]
 }

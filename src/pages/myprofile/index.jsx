@@ -1,6 +1,10 @@
 import { Text, Flex, Box, Avatar, Divider } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
 
 const MyProfile = () => {
+  const authSelector = useSelector((state) => state.auth);
+
+  console.log(authSelector);
   return (
     <Flex align="center" justifyContent="center">
       <Box
@@ -13,18 +17,18 @@ const MyProfile = () => {
         boxShadow="lg"
       >
         <Box display="inline-flex" padding="5">
-          <Avatar size="2xl"></Avatar>
+          <Avatar src={authSelector.avatar} size="2xl"></Avatar>
 
           <Box display="inline-block" paddingLeft="16">
-            <Text fontSize="3xl">Username</Text>
+            <Text fontSize="3xl">{authSelector.username}</Text>
             <Text paddingTop="3" fontWeight="bold">
-              Full Name
+              {authSelector.full_name}
             </Text>
             <Text paddingTop="3">Email</Text>
           </Box>
         </Box>
         <Text paddingTop="3" textAlign="center">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          {authSelector.bio}
         </Text>
 
         <Divider orientation="horizontal" variant="solid" marginTop="3" />

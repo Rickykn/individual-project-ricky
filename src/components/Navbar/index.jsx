@@ -68,6 +68,7 @@ const Navbar = () => {
       </Link>
       {authSelector.id ? (
         <Box display="inline-flex" alignItems="center">
+          {/* Button Upload New Post */}
           <Button
             marginRight="5"
             colorScheme="blue"
@@ -94,6 +95,7 @@ const Navbar = () => {
             </ModalContent>
           </Modal>
 
+          {/* display avatar and name user login  */}
           <Menu>
             <MenuButton>
               <Box display="inline-flex" alignItems="center">

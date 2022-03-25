@@ -4,6 +4,8 @@ const initial_state = {
   id: 0,
   username: "",
   avatar: "",
+  bio: "",
+  full_name: "",
 };
 
 const auth_reducer = (state = initial_state, action) => {
@@ -13,6 +15,8 @@ const auth_reducer = (state = initial_state, action) => {
       id: action.payload.id,
       username: action.payload.username,
       avatar: action.payload.avatar,
+      bio: action.payload.bio,
+      full_name: action.payload.full_name,
     };
   } else if (action.type === auth_types.LOGOUT_USER) {
     return initial_state;

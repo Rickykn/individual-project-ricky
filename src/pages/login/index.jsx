@@ -53,6 +53,8 @@ const LoginPage = () => {
             id: res.data[0].id,
             username: res.data[0].username,
             avatar: res.data[0].avatar,
+            bio: res.data[0].bio,
+            full_name: res.data[0].full_name,
           },
         });
       }
