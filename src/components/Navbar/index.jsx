@@ -8,6 +8,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
@@ -29,7 +37,7 @@ const Navbar = () => {
 
     Router.push("/login");
   };
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       display="flex"
@@ -65,9 +73,27 @@ const Navbar = () => {
             colorScheme="blue"
             variant="outline"
             size="sm"
+            onClick={onOpen}
           >
             New Post
           </Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>New Post</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>INI BUAT NEW POST</Text>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Upload
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           <Menu>
             <MenuButton>
               <Box display="inline-flex" alignItems="center">
