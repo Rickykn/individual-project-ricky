@@ -16,6 +16,10 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  FormHelperText,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
@@ -84,7 +88,19 @@ const Navbar = () => {
               <ModalHeader>New Post</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Text>INI BUAT NEW POST</Text>
+                <form>
+                  <FormControl>
+                    <FormLabel htmlFor="inputImage">Image</FormLabel>
+                    <Input placeholder="Enter your Image" />
+                    <FormHelperText></FormHelperText>
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel htmlFor="inputCaption">Caption</FormLabel>
+                    <Input placeholder="Enter your Caption" />
+                    <FormHelperText></FormHelperText>
+                  </FormControl>
+                </form>
               </ModalBody>
 
               <ModalFooter>
