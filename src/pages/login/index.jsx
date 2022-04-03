@@ -75,6 +75,7 @@ const LoginPage = () => {
       formik.setSubmitting(false);
     }
   };
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -94,7 +95,7 @@ const LoginPage = () => {
     }
   }, [authSelector.id]);
   return (
-    <Flex minHeight="90vh" align="center" justifyContent="center">
+    <Flex minHeight="75vh" align="center" justifyContent="center">
       <Box
         borderWidth="2px"
         px={4}
