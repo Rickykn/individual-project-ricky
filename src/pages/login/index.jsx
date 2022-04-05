@@ -35,34 +35,24 @@ const LoginPage = () => {
 
   const loginHandleBtn = async (values) => {
     try {
-      const res = await axiosInstance.get("/users", {
-        params: {
-          username: values.username,
-          password: values.password,
-        },
+      const res = await axiosInstance.post("/auth/login", {
+        username: values.username,
+        password: values.password,
       });
 
-      if (!res.data.length) {
-        throw new Error("User not found");
-      }
+      const userResponse = res.data.result;
+      console.log(userResponse);
 
-      if (res.data.length) {
+      jsCookie.set("auth_token", userResponse.token);
+
+      if (userResponse.token) {
         dispatch({
           type: auth_types.LOGIN_USER,
-          payload: {
-            id: res.data[0].id,
-            username: res.data[0].username,
-            avatar: res.data[0].avatar,
-            bio: res.data[0].bio,
-            full_name: res.data[0].full_name,
-          },
+          payload: userResponse.user,
         });
       }
 
-      const userData = res.data[0];
-      const stringifiedUserData = JSON.stringify(userData);
-      jsCookie.set("user_data", stringifiedUserData);
-
+      console.log(authSelector);
       Router.push("/posts");
       formik.setSubmitting(false);
     } catch (err) {

@@ -1,21 +1,29 @@
 import jsCookie from "js-cookie";
 import { Children, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { axiosInstance } from "../../configs/api";
 import auth_types from "../../redux/types/auth";
 
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const savedUserData = jsCookie.get("user_data");
+  useEffect(async () => {
+    const userToken = jsCookie.get("auth_token");
 
-    if (savedUserData) {
-      const parseUserData = JSON.parse(savedUserData);
+    if (userToken) {
+      try {
+        const userResponse = await axiosInstance.get("/auth/refresh-token");
 
-      dispatch({
-        type: auth_types.LOGIN_USER,
-        payload: parseUserData,
-      });
+        console.log(userResponse.data);
+        jsCookie.set("auth_token", userResponse?.data?.result?.token || "");
+
+        dispatch({
+          type: auth_types.LOGIN_USER,
+          payload: userResponse.data.result.user,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 

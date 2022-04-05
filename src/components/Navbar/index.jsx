@@ -37,7 +37,7 @@ const Navbar = () => {
       type: auth_types.LOGOUT_USER,
     });
 
-    jsCookie.remove("user_data");
+    jsCookie.remove("auth_token");
 
     Router.push("/login");
   };
