@@ -27,10 +27,52 @@ import { useDispatch, useSelector } from "react-redux";
 import auth_types from "../../redux/types/auth";
 import jsCookie from "js-cookie";
 import Router from "next/router";
+import { useFormik } from "formik";
+import { useRef, useState } from "react";
+import { axiosInstance } from "../../configs/api";
 
 const Navbar = () => {
   const authSelector = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const inputFileRef = useRef(null);
+
+  const formik = useFormik({
+    initialValues: {
+      caption: "",
+      location: "",
+    },
+  });
+
+  const handleFile = (event) => {
+    setSelectedFile(event.target.files[0]);
+    alert(event.target.files[0].name);
+  };
+
+  const uploadContentHandler = async () => {
+    // Proteksi jika file belum dipilih
+    if (!selectedFile) {
+      alert("Anda belum pilih file");
+      return;
+    }
+
+    const formData = new FormData();
+    const { caption, location } = formik.values;
+
+    formData.append("caption", caption);
+    formData.append("location", location);
+    // formData.append("user_id", authSelector.id)
+    formData.append("post_image_file", selectedFile);
+
+    try {
+      await axiosInstance.post("/posts", formData);
+      setSelectedFile(null);
+      formik.setFieldValue("caption", "");
+      formik.setFieldValue("location", "");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const logoutHandlerBtn = () => {
     dispatch({
@@ -41,6 +83,7 @@ const Navbar = () => {
 
     Router.push("/login");
   };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
@@ -90,21 +133,51 @@ const Navbar = () => {
               <ModalBody>
                 <form>
                   <FormControl>
-                    <FormLabel htmlFor="inputImage">Image</FormLabel>
-                    <Input placeholder="Enter your Image" />
+                    <FormLabel htmlFor="inputCaption">Caption</FormLabel>
+                    <Input
+                      value={formik.values.caption}
+                      onChange={(e) =>
+                        formik.setFieldValue("caption", e.target.value)
+                      }
+                      placeholder="Enter your Caption"
+                    />
                     <FormHelperText></FormHelperText>
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel htmlFor="inputCaption">Caption</FormLabel>
-                    <Input placeholder="Enter your Caption" />
+                    <FormLabel htmlFor="inputLocation">Location</FormLabel>
+                    <Input
+                      value={formik.values.location}
+                      onChange={(e) =>
+                        formik.setFieldValue("location", e.target.value)
+                      }
+                      placeholder="Enter your Location"
+                    />
                     <FormHelperText></FormHelperText>
                   </FormControl>
+                  <FormLabel>Image</FormLabel>
+                  <Input
+                    accept="image/png, image/jpeg"
+                    onChange={handleFile}
+                    ref={inputFileRef}
+                    type="file"
+                    display="none"
+                  />
+                  <Button
+                    onClick={() => inputFileRef.current.click()}
+                    colorScheme="facebook"
+                  >
+                    Choose File
+                  </Button>
                 </form>
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={uploadContentHandler}
+                >
                   Upload
                 </Button>
               </ModalFooter>
