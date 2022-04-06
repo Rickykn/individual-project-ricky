@@ -11,7 +11,12 @@ const HomePage = () => {
 
   const fetchContentList = async () => {
     try {
-      const res = await axiosInstance.get("/posts");
+      const res = await axiosInstance.get("/posts", {
+        params: {
+          _sortBy: "createdAt",
+          _sortDir: "DESC",
+        },
+      });
       console.log(res.data);
 
       setContentList(res.data.result.rows);
