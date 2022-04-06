@@ -8,7 +8,6 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  // config.headers.token = "testing123"
   config.headers.authorization = jsCookie.get("auth_token") || "";
 
   return config;

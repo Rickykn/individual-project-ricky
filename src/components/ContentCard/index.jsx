@@ -8,6 +8,7 @@ import {
   Grid,
   GridItem,
   useToast,
+  AspectRatio,
 } from "@chakra-ui/react";
 import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
@@ -72,7 +73,12 @@ const CardContent = ({
         maxWidth="50vw"
       >
         {/* Heading */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          marginBottom={2}
+        >
           <Box display="inline-flex">
             <Avatar size="md" />
             <Box paddingX="3">
@@ -88,31 +94,29 @@ const CardContent = ({
         </Box>
 
         {/* Content */}
-        <Box paddingY="3">
-          <Image
-            objectFit="cover"
-            borderRadius="10"
-            minWidth="full"
-            src={imageUrl}
-          />
-        </Box>
+        <AspectRatio ratio={4 / 3}>
+          <Box position="relative" borderRadius={16}>
+            <Image minWidth="full" src={imageUrl} />
+          </Box>
+        </AspectRatio>
 
         {/* Action */}
+        <Box marginTop={2}>
+          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+            <GridItem display="inline-flex" justifyContent="center">
+              <Icon boxSize={6} as={FaRegHeart} />
+              <Text paddingLeft="2">{numberOfLikes}</Text>
+            </GridItem>
 
-        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-          <GridItem display="inline-flex" justifyContent="center">
-            <Icon boxSize={6} as={FaRegHeart} />
-            <Text paddingLeft="2">{numberOfLikes}</Text>
-          </GridItem>
+            <GridItem paddingLeft="5" display="flex" justifyContent="center">
+              <Icon boxSize={6} as={FaRegCommentDots} />
+            </GridItem>
 
-          <GridItem paddingLeft="5" display="flex" justifyContent="center">
-            <Icon boxSize={6} as={FaRegCommentDots} />
-          </GridItem>
-
-          <GridItem paddingLeft="5" display="flex" justifyContent="center">
-            <Icon boxSize={6} as={FaRegShareSquare} />
-          </GridItem>
-        </Grid>
+            <GridItem paddingLeft="5" display="flex" justifyContent="center">
+              <Icon boxSize={6} as={FaRegShareSquare} />
+            </GridItem>
+          </Grid>
+        </Box>
 
         {/* caption */}
         <Box display="inline-flex">
