@@ -26,27 +26,27 @@ const CardContent = ({
   const [comments, setComments] = useState([]);
   // const [commentInput, setCommentInput] = useState("");
 
-  const fetchAllComment = async () => {
-    //  const res = await axiosInstance.get("/comments")
-    try {
-      const res = await axiosInstance.get("/comments", {
-        params: {
-          _expand: "user",
-          postId: id,
-        },
-      });
-      setComments(res.data);
-    } catch (error) {
-      toast({
-        title: "Fetch data failed",
-        description: "There is an error at the server",
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-    }
-  };
+  // const fetchAllComment = async () => {
+  //   //  const res = await axiosInstance.get("/comments")
+  //   try {
+  //     const res = await axiosInstance.get("/comments", {
+  //       params: {
+  //         _expand: "user",
+  //         postId: id,
+  //       },
+  //     });
+  //     setComments(res.data);
+  //   } catch (error) {
+  //     toast({
+  //       title: "Fetch data failed",
+  //       description: "There is an error at the server",
+  //       status: "error",
+  //       duration: 4000,
+  //       isClosable: true,
+  //       position: "top",
+  //     });
+  //   }
+  // };
 
   const renderAllComment = () => {
     return comments.map((val) => {
@@ -55,7 +55,7 @@ const CardContent = ({
   };
 
   useEffect(() => {
-    fetchAllComment();
+    // fetchAllComment();
   }, []);
 
   return (
@@ -74,7 +74,7 @@ const CardContent = ({
         {/* Heading */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box display="inline-flex">
-            <Avatar src="https://bit.ly/dan-abramov" size="md" />
+            <Avatar size="md" />
             <Box paddingX="3">
               <Text fontSize="lg">{username}</Text>
               <Text fontSize="sm" color="gray.500">
@@ -89,7 +89,12 @@ const CardContent = ({
 
         {/* Content */}
         <Box paddingY="3">
-          <Image borderRadius="10" minWidth="full" src={imageUrl} />
+          <Image
+            objectFit="cover"
+            borderRadius="10"
+            minWidth="full"
+            src={imageUrl}
+          />
         </Box>
 
         {/* Action */}
@@ -122,7 +127,7 @@ const CardContent = ({
           <Text marginTop="3" as="i">
             COMMENT
           </Text>
-          {renderAllComment()}
+          {/* {renderAllComment()} */}
         </Box>
       </Box>
     </Flex>

@@ -11,13 +11,10 @@ const HomePage = () => {
 
   const fetchContentList = async () => {
     try {
-      const res = await axiosInstance.get("/posts", {
-        params: {
-          _expand: "user",
-        },
-      });
+      const res = await axiosInstance.get("/posts");
+      console.log(res.data);
 
-      setContentList(res.data);
+      setContentList(res.data.result.rows);
     } catch (error) {
       toast({
         title: "Fetch data failed",
@@ -35,11 +32,11 @@ const HomePage = () => {
       return contentList.map((val) => {
         return (
           <CardContent
-            username={val?.user?.username}
+            username={val?.User?.username}
             caption={val.caption}
             imageUrl={val.image_url}
             location={val.location}
-            numberOfLikes={val.number_of_likes}
+            numberOfLikes={val.like_count}
             id={val.id}
           />
         );
