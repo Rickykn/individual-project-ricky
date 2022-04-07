@@ -17,7 +17,7 @@ const HomePage = () => {
           _sortDir: "DESC",
         },
       });
-      console.log(res.data);
+      // console.log(res.data);
 
       setContentList(res.data.result.rows);
     } catch (error) {
@@ -43,6 +43,7 @@ const HomePage = () => {
             location={val.location}
             numberOfLikes={val.like_count}
             id={val.id}
+            user_id={val.user_id}
           />
         );
       });

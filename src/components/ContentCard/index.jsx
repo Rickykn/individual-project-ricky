@@ -9,12 +9,19 @@ import {
   GridItem,
   useToast,
   AspectRatio,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  IconButton,
 } from "@chakra-ui/react";
 import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
+import { BsThreeDots } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const CardContent = ({
   username,
@@ -23,8 +30,11 @@ const CardContent = ({
   location,
   numberOfLikes,
   id,
+  user_id,
 }) => {
   const [comments, setComments] = useState([]);
+  const authSelector = useSelector((state) => state.auth);
+  const toast = useToast();
   // const [commentInput, setCommentInput] = useState("");
 
   // const fetchAllComment = async () => {
@@ -53,6 +63,29 @@ const CardContent = ({
     return comments.map((val) => {
       return <Comment username={val.user.username} content={val.content} />;
     });
+  };
+
+  const deletePost = async () => {
+    try {
+      await axiosInstance.delete(`/posts/${id}`);
+      toast({
+        title: "Deleted posts",
+        description: "Success for delete your posts",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    } catch (err) {
+      toast({
+        title: "Fetch data failed",
+        description: "There is an error at the server",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+    }
   };
 
   useEffect(() => {
@@ -84,12 +117,23 @@ const CardContent = ({
             <Box paddingX="3">
               <Text fontSize="lg">{username}</Text>
               <Text fontSize="sm" color="gray.500">
-                Posted a photo!
+                {location}
               </Text>
             </Box>
           </Box>
           <Box paddingX="3">
-            <Text fontSize="md">{location}</Text>
+            <Menu>
+              <MenuButton as={IconButton} icon={<Icon as={BsThreeDots} />} />
+              <MenuList>
+                <MenuItem>View Details</MenuItem>
+                {user_id === authSelector.id ? (
+                  <>
+                    <MenuItem>Edit Post</MenuItem>
+                    <MenuItem onClick={deletePost}>Delete Post</MenuItem>
+                  </>
+                ) : null}
+              </MenuList>
+            </Menu>
           </Box>
         </Box>
 
