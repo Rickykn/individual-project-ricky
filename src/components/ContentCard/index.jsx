@@ -14,6 +14,8 @@ import {
   MenuItem,
   MenuList,
   IconButton,
+  Input,
+  Button,
 } from "@chakra-ui/react";
 import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
@@ -175,6 +177,16 @@ const CardContent = ({
           <Text marginTop="3" as="i">
             COMMENT
           </Text>
+          {/* input comment */}
+          <Box display="flex" marginTop="2">
+            <Input
+              marginBottom="2"
+              type="text"
+              placeholder="Insert a new comment"
+              marginRight="2"
+            />
+            <Button colorScheme="green">Post</Button>
+          </Box>
           {renderAllComment()}
         </Box>
       </Box>
