@@ -35,33 +35,33 @@ const CardContent = ({
   const [comments, setComments] = useState([]);
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
-  // const [commentInput, setCommentInput] = useState("");
 
-  // const fetchAllComment = async () => {
-  //   //  const res = await axiosInstance.get("/comments")
-  //   try {
-  //     const res = await axiosInstance.get("/comments", {
-  //       params: {
-  //         _expand: "user",
-  //         postId: id,
-  //       },
-  //     });
-  //     setComments(res.data);
-  //   } catch (error) {
-  //     toast({
-  //       title: "Fetch data failed",
-  //       description: "There is an error at the server",
-  //       status: "error",
-  //       duration: 4000,
-  //       isClosable: true,
-  //       position: "top",
-  //     });
-  //   }
-  // };
+  const fetchAllComment = async () => {
+    //  const res = await axiosInstance.get("/comments")
+    try {
+      const res = await axiosInstance.get(`/comments/${id}`);
+      console.log(res.data.result);
+      setComments(res.data.result);
+    } catch (error) {
+      toast({
+        title: "Fetch data failed",
+        description: "There is an error at the server",
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
+    }
+  };
 
   const renderAllComment = () => {
     return comments.map((val) => {
-      return <Comment username={val.user.username} content={val.content} />;
+      return (
+        <Comment
+          username={val?.User?.username}
+          content={val?.comment_content}
+        />
+      );
     });
   };
 
@@ -89,7 +89,7 @@ const CardContent = ({
   };
 
   useEffect(() => {
-    // fetchAllComment();
+    fetchAllComment();
   }, []);
 
   return (
@@ -175,7 +175,7 @@ const CardContent = ({
           <Text marginTop="3" as="i">
             COMMENT
           </Text>
-          {/* {renderAllComment()} */}
+          {renderAllComment()}
         </Box>
       </Box>
     </Flex>

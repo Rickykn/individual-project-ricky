@@ -14,7 +14,6 @@ const AuthProvider = ({ children }) => {
       try {
         const userResponse = await axiosInstance.get("/auth/refresh-token");
 
-        console.log(userResponse.data);
         jsCookie.set("auth_token", userResponse?.data?.result?.token || "");
 
         dispatch({
