@@ -74,7 +74,7 @@ const CardContent = ({
         status: "success",
         duration: 3000,
         isClosable: true,
-        position: "top",
+        position: "top-right",
       });
     } catch (err) {
       toast({
@@ -83,7 +83,7 @@ const CardContent = ({
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "top",
+        position: "top-right",
       });
     }
   };

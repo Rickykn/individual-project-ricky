@@ -19,6 +19,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
   FormHelperText,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -36,6 +37,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState(null);
   const inputFileRef = useRef(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const formik = useFormik({
     initialValues: {
@@ -61,7 +64,6 @@ const Navbar = () => {
 
     formData.append("caption", caption);
     formData.append("location", location);
-    // formData.append("user_id", authSelector.id)
     formData.append("post_image_file", selectedFile);
 
     try {
@@ -69,6 +71,15 @@ const Navbar = () => {
       setSelectedFile(null);
       formik.setFieldValue("caption", "");
       formik.setFieldValue("location", "");
+      toast({
+        title: "Added posts",
+        description: "Success for add new posts",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+      onClose();
     } catch (err) {
       console.log(err);
     }
@@ -84,7 +95,6 @@ const Navbar = () => {
     Router.push("/login");
   };
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       display="flex"
@@ -141,7 +151,7 @@ const Navbar = () => {
                       }
                       placeholder="Enter your Caption"
                     />
-                    <FormHelperText></FormHelperText>
+                    {/* <FormHelperText></FormHelperText> */}
                   </FormControl>
 
                   <FormControl>
@@ -153,7 +163,7 @@ const Navbar = () => {
                       }
                       placeholder="Enter your Location"
                     />
-                    <FormHelperText></FormHelperText>
+                    {/* <FormHelperText></FormHelperText> */}
                   </FormControl>
                   <FormLabel>Image</FormLabel>
                   <Input
