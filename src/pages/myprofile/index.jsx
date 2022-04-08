@@ -20,9 +20,7 @@ const MyProfile = () => {
           <Avatar src={authSelector.avatar} size="2xl"></Avatar>
 
           <Box display="inline-block" paddingLeft="16">
-            <Text fontSize="3xl">
-              {authSelector.username} {authSelector.id}
-            </Text>
+            <Text fontSize="3xl">{authSelector.username}</Text>
             <Text paddingTop="3" fontWeight="bold">
               {authSelector.full_name}
             </Text>

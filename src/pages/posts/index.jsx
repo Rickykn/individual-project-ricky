@@ -38,11 +38,11 @@ const HomePage = () => {
         return (
           <CardContent
             username={val?.User?.username}
-            caption={val.caption}
-            imageUrl={val.image_url}
-            location={val.location}
-            numberOfLikes={val.like_count}
-            id={val.id}
+            caption={val?.caption}
+            imageUrl={val?.image_url}
+            location={val?.location}
+            numberOfLikes={val?.like_count}
+            id={val?.id}
             user_id={val.user_id}
           />
         );
