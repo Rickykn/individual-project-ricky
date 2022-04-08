@@ -16,7 +16,7 @@ import { axiosInstance } from "../../configs/api";
 
 const RegisterPage = () => {
   const toast = useToast();
-  const resgisterBtn = async (values) => {
+  const registerBtn = async (values) => {
     try {
       const newUser = {
         username: values.username,
@@ -36,6 +36,7 @@ const RegisterPage = () => {
         title: "Registered user",
         description: res.data.message,
         duration: 2000,
+        position: "top-right",
       });
     } catch (err) {
       console.log(Object.keys(err));
@@ -44,6 +45,7 @@ const RegisterPage = () => {
         title: "Register Failed",
         description: err?.response?.data?.message || err.message,
         duration: 2000,
+        position: "top-right",
       });
     }
   };
@@ -61,7 +63,7 @@ const RegisterPage = () => {
       repeatPassword: Yup.string().required("This field is required"),
     }),
     validateOnChange: false,
-    onSubmit: resgisterBtn,
+    onSubmit: registerBtn,
   });
 
   return (

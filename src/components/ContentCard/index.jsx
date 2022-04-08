@@ -16,14 +16,18 @@ import {
   IconButton,
   Input,
   Button,
+  FormControl,
+  FormLabel,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import { BsThreeDots } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const CardContent = ({
   username,
@@ -49,9 +53,9 @@ const CardContent = ({
         title: "Fetch data failed",
         description: "There is an error at the server",
         status: "error",
-        duration: 4000,
+        duration: 3000,
         isClosable: true,
-        position: "top",
+        position: "top-right",
       });
     }
   };
@@ -89,6 +93,39 @@ const CardContent = ({
       });
     }
   };
+
+  const commentHandleBtn = async (values) => {
+    try {
+      const newComment = {
+        comment_content: values.comment,
+        post_id: id,
+      };
+
+      await axiosInstance.post("/comments", newComment);
+      toast({
+        title: "Added Comment",
+        description: "Success added comment! ",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+      fetchAllComment();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      comment: "",
+    },
+    validationSchema: Yup.object().shape({
+      comment: Yup.string().required("This field is required"),
+    }),
+    validateOnChange: false,
+    onSubmit: commentHandleBtn,
+  });
 
   useEffect(() => {
     fetchAllComment();
@@ -179,13 +216,22 @@ const CardContent = ({
           </Text>
           {/* input comment */}
           <Box display="flex" marginTop="2">
-            <Input
-              marginBottom="2"
-              type="text"
-              placeholder="Insert a new comment"
-              marginRight="2"
-            />
-            <Button colorScheme="green">Post</Button>
+            <FormControl isInvalid={formik.errors.comment} display="flex">
+              <FormLabel htmlFor="inputComment"></FormLabel>
+              <Input
+                onChange={(event) =>
+                  formik.setFieldValue("comment", event.target.value)
+                }
+                marginBottom="2"
+                type="text"
+                placeholder="Add a new comment"
+                marginRight="2"
+              />
+              <FormHelperText>{formik.errors.comment}</FormHelperText>
+              <Button onClick={formik.handleSubmit} colorScheme="green">
+                Post
+              </Button>
+            </FormControl>
           </Box>
           {renderAllComment()}
         </Box>
