@@ -1,7 +1,6 @@
 import CardContent from "../../components/ContentCard";
 import { Box, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-
 import { axiosInstance } from "../../configs/api";
 import requiresAuth from "../../lib/requiresAuth";
 

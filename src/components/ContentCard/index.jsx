@@ -28,6 +28,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Link from "next/link";
 
 const CardContent = ({
   username,
@@ -52,7 +53,7 @@ const CardContent = ({
           _sortDir: "DESC",
         },
       });
-      console.log(res.data.result);
+      // console.log(res.data.result);
       setComments(res.data.result.rows);
     } catch (error) {
       toast({
@@ -66,7 +67,8 @@ const CardContent = ({
     }
   };
 
-  const renderAllComment = () => {
+  const renderComment = () => {
+    console.log(comments);
     return comments.map((val) => {
       return (
         <Comment
@@ -172,7 +174,9 @@ const CardContent = ({
             <Menu>
               <MenuButton as={IconButton} icon={<Icon as={BsThreeDots} />} />
               <MenuList>
-                <MenuItem>View Details</MenuItem>
+                <Link href={`/posts/${id}`}>
+                  <MenuItem>Detail Post</MenuItem>
+                </Link>
                 {user_id === authSelector.id ? (
                   <>
                     <MenuItem>Edit Post</MenuItem>
@@ -248,7 +252,7 @@ const CardContent = ({
               </Button>
             </FormControl>
           </Box>
-          {renderAllComment()}
+          {renderComment()}
         </Box>
       </Box>
     </Flex>
