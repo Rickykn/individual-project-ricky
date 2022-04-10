@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import { axiosInstance } from "../../configs/api";
 import { useDispatch, useSelector } from "react-redux";
 import auth_types from "../../redux/types/auth";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import jsCookie from "js-cookie";
 import * as Yup from "yup";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";

@@ -13,9 +13,11 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance } from "../../configs/api";
+import { useRouter } from "next/router";
 
 const RegisterPage = () => {
   const toast = useToast();
+  const Router = useRouter();
   const registerBtn = async (values) => {
     try {
       const newUser = {
@@ -38,6 +40,8 @@ const RegisterPage = () => {
         duration: 2000,
         position: "top-right",
       });
+
+      Router.push("/login");
     } catch (err) {
       console.log(Object.keys(err));
       toast({

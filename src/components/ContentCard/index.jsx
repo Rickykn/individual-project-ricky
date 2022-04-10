@@ -45,9 +45,15 @@ const CardContent = ({
   const fetchAllComment = async () => {
     //  const res = await axiosInstance.get("/comments")
     try {
-      const res = await axiosInstance.get(`/comments/${id}`);
+      const res = await axiosInstance.get(`/comments/${id}`, {
+        params: {
+          _limit: 5,
+          _sortBy: "createdAt",
+          _sortDir: "DESC",
+        },
+      });
       console.log(res.data.result);
-      setComments(res.data.result);
+      setComments(res.data.result.rows);
     } catch (error) {
       toast({
         title: "Fetch data failed",
@@ -121,7 +127,9 @@ const CardContent = ({
       comment: "",
     },
     validationSchema: Yup.object().shape({
-      comment: Yup.string().required("This field is required"),
+      comment: Yup.string()
+        .max(300, "Too Long!")
+        .required("This field is required"),
     }),
     validateOnChange: false,
     onSubmit: commentHandleBtn,
@@ -216,7 +224,10 @@ const CardContent = ({
           </Text>
           {/* input comment */}
           <Box display="flex" marginTop="2">
-            <FormControl isInvalid={formik.errors.comment} display="flex">
+            <FormControl
+              isInvalid={formik.errors.comment}
+              display="inline-flex"
+            >
               <FormLabel htmlFor="inputComment"></FormLabel>
               <Input
                 onChange={(event) =>
@@ -228,7 +239,11 @@ const CardContent = ({
                 marginRight="2"
               />
               <FormHelperText>{formik.errors.comment}</FormHelperText>
-              <Button onClick={formik.handleSubmit} colorScheme="green">
+              <Button
+                onClick={formik.handleSubmit}
+                colorScheme="green"
+                type="submit"
+              >
                 Post
               </Button>
             </FormControl>
