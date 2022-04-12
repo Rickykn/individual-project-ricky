@@ -14,21 +14,34 @@ import {
   MenuItem,
   MenuList,
   IconButton,
-  Input,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
   Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
   FormControl,
   FormLabel,
   FormHelperText,
+  Input,
 } from "@chakra-ui/react";
 import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
-import Comment from "../Comment";
-import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import { BsThreeDots } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import React from "react";
 
 const CardContent = ({
   username,
@@ -39,44 +52,13 @@ const CardContent = ({
   id,
   user_id,
 }) => {
-  const [comments, setComments] = useState([]);
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
 
-  const fetchAllComment = async () => {
-    //  const res = await axiosInstance.get("/comments")
-    try {
-      const res = await axiosInstance.get(`/comments/${id}`, {
-        params: {
-          _limit: 5,
-          _sortBy: "createdAt",
-          _sortDir: "DESC",
-        },
-      });
-      // console.log(res.data.result);
-      setComments(res.data.result.rows);
-    } catch (error) {
-      toast({
-        title: "Fetch data failed",
-        description: "There is an error at the server",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top-right",
-      });
-    }
-  };
-
-  const renderComment = () => {
-    console.log(comments);
-    return comments.map((val) => {
-      return (
-        <Comment
-          username={val?.User?.username}
-          content={val?.comment_content}
-        />
-      );
-    });
+  const refreshPage = () => {
+    window.location.reload(false);
   };
 
   const deletePost = async () => {
@@ -90,6 +72,7 @@ const CardContent = ({
         isClosable: true,
         position: "top-right",
       });
+      onClose();
     } catch (err) {
       toast({
         title: "Fetch data failed",
@@ -102,23 +85,22 @@ const CardContent = ({
     }
   };
 
-  const commentHandleBtn = async (values) => {
+  const editPost = async (values) => {
     try {
-      const newComment = {
-        comment_content: values.comment,
-        post_id: id,
+      const newCaption = {
+        caption: values.caption,
       };
-
-      await axiosInstance.post("/comments", newComment);
+      await axiosInstance.patch(`/posts/${id}`, newCaption);
       toast({
-        title: "Added Comment",
-        description: "Success added comment! ",
+        title: "Edited Caption",
+        description: "Success for edit your caption",
         status: "success",
         duration: 3000,
         isClosable: true,
         position: "top-right",
       });
-      fetchAllComment();
+      onClose();
+      refreshPage();
     } catch (err) {
       console.log(err);
     }
@@ -126,20 +108,14 @@ const CardContent = ({
 
   const formik = useFormik({
     initialValues: {
-      comment: "",
+      caption: "",
     },
     validationSchema: Yup.object().shape({
-      comment: Yup.string()
-        .max(300, "Too Long!")
-        .required("This field is required"),
+      caption: Yup.string().required("This field is required"),
     }),
     validateOnChange: false,
-    onSubmit: commentHandleBtn,
+    onSubmit: editPost,
   });
-
-  useEffect(() => {
-    fetchAllComment();
-  }, []);
 
   return (
     <Flex justifyContent="center">
@@ -179,14 +155,88 @@ const CardContent = ({
                 </Link>
                 {user_id === authSelector.id ? (
                   <>
-                    <MenuItem>Edit Post</MenuItem>
-                    <MenuItem onClick={deletePost}>Delete Post</MenuItem>
+                    <MenuItem onClick={onOpen}>Edit Post</MenuItem>
+                    <Modal isOpen={isOpen} onClose={onClose}>
+                      <ModalOverlay>
+                        <ModalContent>
+                          <ModalHeader>Edit Your Post</ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody>
+                            <form>
+                              <FormControl isInvalid={formik.errors.caption}>
+                                <FormLabel htmlFor="inputCaption">
+                                  Caption
+                                </FormLabel>
+                                <Input
+                                  value={formik.values.caption}
+                                  onChange={(e) =>
+                                    formik.setFieldValue(
+                                      "caption",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder={caption}
+                                />
+                                <FormHelperText>
+                                  {formik.errors.caption}
+                                </FormHelperText>
+                              </FormControl>
+                            </form>
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button variant="ghost" mr={3} onClick={onClose}>
+                              Cancel
+                            </Button>
+                            <Button
+                              colorScheme="blue"
+                              onClick={formik.handleSubmit}
+                            >
+                              Save
+                            </Button>
+                          </ModalFooter>
+                        </ModalContent>
+                      </ModalOverlay>
+                    </Modal>
+
+                    {/* <MenuItem onClick={onOpen}>Delete Post</MenuItem>
+                    <AlertDialog
+                      isOpen={isOpen}
+                      leastDestructiveRef={cancelRef}
+                      onClose={onClose}
+                    >
+                      <AlertDialogOverlay>
+                        <AlertDialogContent>
+                          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Post
+                          </AlertDialogHeader>
+
+                          <AlertDialogBody>
+                            Are you sure delete this post?
+                          </AlertDialogBody>
+
+                          <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                              Cancel
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              onClick={deletePost}
+                              ml={3}
+                            >
+                              Delete
+                            </Button>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialogOverlay>
+                    </AlertDialog> */}
                   </>
                 ) : null}
               </MenuList>
             </Menu>
           </Box>
         </Box>
+
+        {/* modal edit post */}
 
         {/* Content */}
         <AspectRatio ratio={4 / 3}>
@@ -219,40 +269,6 @@ const CardContent = ({
             {username}
           </Text>
           <Text>{caption}</Text>
-        </Box>
-
-        {/* Comment */}
-        <Box display="flex" flexDirection="column">
-          <Text marginTop="3" as="i">
-            COMMENT
-          </Text>
-          {/* input comment */}
-          <Box display="flex" marginTop="2">
-            <FormControl
-              isInvalid={formik.errors.comment}
-              display="inline-flex"
-            >
-              <FormLabel htmlFor="inputComment"></FormLabel>
-              <Input
-                onChange={(event) =>
-                  formik.setFieldValue("comment", event.target.value)
-                }
-                marginBottom="2"
-                type="text"
-                placeholder="Add a new comment"
-                marginRight="2"
-              />
-              <FormHelperText>{formik.errors.comment}</FormHelperText>
-              <Button
-                onClick={formik.handleSubmit}
-                colorScheme="green"
-                type="submit"
-              >
-                Post
-              </Button>
-            </FormControl>
-          </Box>
-          {renderComment()}
         </Box>
       </Box>
     </Flex>

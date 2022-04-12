@@ -31,6 +31,7 @@ import Router from "next/router";
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
 import { axiosInstance } from "../../configs/api";
+import * as Yup from "yup";
 
 const Navbar = () => {
   const authSelector = useSelector((state) => state.auth);
@@ -39,13 +40,6 @@ const Navbar = () => {
   const inputFileRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
-  const formik = useFormik({
-    initialValues: {
-      caption: "",
-      location: "",
-    },
-  });
 
   const handleFile = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -97,6 +91,19 @@ const Navbar = () => {
     Router.push("/login");
   };
 
+  const formik = useFormik({
+    initialValues: {
+      caption: "",
+      location: "",
+    },
+    validationSchema: Yup.object().shape({
+      caption: Yup.string().required("This field is required"),
+      location: Yup.string().required("This field is required"),
+    }),
+    validateOnChange: false,
+    onSubmit: uploadContentHandler,
+  });
+
   return (
     <Box
       display="flex"
@@ -125,6 +132,7 @@ const Navbar = () => {
           />
         </Box>
       </Link>
+
       {authSelector.id ? (
         <Box display="inline-flex" alignItems="center">
           {/* Button Upload New Post */}
@@ -144,7 +152,7 @@ const Navbar = () => {
               <ModalCloseButton />
               <ModalBody>
                 <form>
-                  <FormControl>
+                  <FormControl isInvalid={formik.errors.caption}>
                     <FormLabel htmlFor="inputCaption">Caption</FormLabel>
                     <Input
                       value={formik.values.caption}
@@ -153,10 +161,10 @@ const Navbar = () => {
                       }
                       placeholder="Enter your Caption"
                     />
-                    {/* <FormHelperText></FormHelperText> */}
+                    <FormHelperText>{formik.errors.caption}</FormHelperText>
                   </FormControl>
 
-                  <FormControl>
+                  <FormControl isInvalid={formik.errors.location}>
                     <FormLabel htmlFor="inputLocation">Location</FormLabel>
                     <Input
                       value={formik.values.location}
@@ -165,7 +173,7 @@ const Navbar = () => {
                       }
                       placeholder="Enter your Location"
                     />
-                    {/* <FormHelperText></FormHelperText> */}
+                    <FormHelperText>{formik.errors.location}</FormHelperText>
                   </FormControl>
                   <FormLabel>Image</FormLabel>
                   <Input
@@ -185,11 +193,7 @@ const Navbar = () => {
               </ModalBody>
 
               <ModalFooter>
-                <Button
-                  colorScheme="blue"
-                  mr={3}
-                  onClick={uploadContentHandler}
-                >
+                <Button colorScheme="blue" mr={3} onClick={formik.handleSubmit}>
                   Upload
                 </Button>
               </ModalFooter>

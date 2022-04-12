@@ -1,9 +1,10 @@
-import CardContent from "../../components/ContentCard";
+import DetailPost from "../../components/DetailPost";
 import { axiosInstance } from "../../configs/api";
+import requiresAuth from "../../lib/requiresAuth";
 
 const PostDetail = ({ postDetailData }) => {
   return (
-    <CardContent
+    <DetailPost
       username={postDetailData?.User?.username}
       caption={postDetailData?.caption}
       imageUrl={postDetailData?.image_url}
@@ -11,11 +12,11 @@ const PostDetail = ({ postDetailData }) => {
       numberOfLikes={postDetailData?.like_count}
       id={postDetailData?.id}
       user_id={postDetailData.user_id}
-    />
+    ></DetailPost>
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = requiresAuth(async (context) => {
   try {
     const postId = context.params.postDetail;
 
@@ -29,5 +30,5 @@ export const getServerSideProps = async (context) => {
   } catch (err) {
     console.log(err);
   }
-};
+});
 export default PostDetail;

@@ -16,7 +16,6 @@ const HomePage = () => {
           _sortDir: "DESC",
         },
       });
-      // console.log(res.data);
 
       setContentList(res.data.result.rows);
     } catch (error) {

@@ -59,8 +59,10 @@ const LoginPage = () => {
       toast({
         status: "error",
         title: "Login Failed",
-        description: err.message,
+        description: err.response.data.message,
         duration: 2000,
+        isClosable: true,
+        position: "top-right",
       });
       formik.setSubmitting(false);
     }
