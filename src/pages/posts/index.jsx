@@ -8,6 +8,7 @@ const HomePage = () => {
   const [contentList, setContentList] = useState([]);
   const toast = useToast();
 
+  // get post content data from api
   const fetchContentList = async () => {
     try {
       const res = await axiosInstance.get("/posts", {
@@ -30,6 +31,7 @@ const HomePage = () => {
     }
   };
 
+  // render post data for display in ui
   const renderContentList = () => {
     if (contentList.length) {
       return contentList.map((val) => {
@@ -55,6 +57,7 @@ const HomePage = () => {
   return <Box>{renderContentList()}</Box>;
 };
 
+// authorize for user must login for access this page
 export const getServerSideProps = requiresAuth((context) => {
   return {
     props: {},

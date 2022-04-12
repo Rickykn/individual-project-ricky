@@ -16,6 +16,7 @@ const PostDetail = ({ postDetailData }) => {
   );
 };
 
+// get post data by id from server side for detail post data
 export const getServerSideProps = requiresAuth(async (context) => {
   try {
     const postId = context.params.postDetail;

@@ -19,7 +19,6 @@ import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
-import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -32,9 +31,9 @@ const DetailPost = ({
   id,
 }) => {
   const [comments, setComments] = useState([]);
-  const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
 
+  // get comment pagination from api
   const fetchAllComment = async () => {
     try {
       const res = await axiosInstance.get(`/comments/${id}`, {
@@ -58,6 +57,7 @@ const DetailPost = ({
     }
   };
 
+  // render comment for display in ui
   const renderComment = () => {
     return comments.map((val) => {
       return (
@@ -69,6 +69,7 @@ const DetailPost = ({
     });
   };
 
+  // function button for add new post
   const commentHandleBtn = async (values) => {
     try {
       const newComment = {
@@ -92,6 +93,7 @@ const DetailPost = ({
     }
   };
 
+  // validation and handle form input
   const formik = useFormik({
     initialValues: {
       comment: "",
