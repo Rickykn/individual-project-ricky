@@ -41,6 +41,10 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const refreshPage = () => {
+    window.location.reload(false);
+  };
+
   const handleFile = (event) => {
     setSelectedFile(event.target.files[0]);
     alert(event.target.files[0].name);
@@ -62,6 +66,7 @@ const Navbar = () => {
 
     try {
       await axiosInstance.post("/posts", formData);
+      refreshPage();
       setSelectedFile(null);
       formik.setFieldValue("caption", "");
       formik.setFieldValue("location", "");

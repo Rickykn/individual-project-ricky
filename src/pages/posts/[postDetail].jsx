@@ -5,7 +5,7 @@ import requiresAuth from "../../lib/requiresAuth";
 const PostDetail = ({ postDetailData }) => {
   return (
     <DetailPost
-      username={postDetailData?.User?.username}
+      username={postDetailData?.user_posts?.username}
       caption={postDetailData?.caption}
       imageUrl={postDetailData?.image_url}
       location={postDetailData?.location}

@@ -41,7 +41,8 @@ import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 const CardContent = ({
   username,
@@ -51,10 +52,14 @@ const CardContent = ({
   numberOfLikes,
   id,
   user_id,
+  user_like,
+  addLikes,
+  removeLikes,
 }) => {
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [likeStatus, setLikeStatus] = useState(user_like);
   const cancelRef = React.useRef();
 
   const refreshPage = () => {
@@ -155,7 +160,7 @@ const CardContent = ({
                 </Link>
                 {user_id === authSelector.id ? (
                   <>
-                    <MenuItem onClick={onOpen}>Edit Post</MenuItem>
+                    {/* <MenuItem onClick={onOpen}>Edit Post</MenuItem>
                     <Modal isOpen={isOpen} onClose={onClose}>
                       <ModalOverlay>
                         <ModalContent>
@@ -196,9 +201,9 @@ const CardContent = ({
                           </ModalFooter>
                         </ModalContent>
                       </ModalOverlay>
-                    </Modal>
+                    </Modal> */}
 
-                    {/* <MenuItem onClick={onOpen}>Delete Post</MenuItem>
+                    <MenuItem onClick={onOpen}>Delete Post</MenuItem>
                     <AlertDialog
                       isOpen={isOpen}
                       leastDestructiveRef={cancelRef}
@@ -228,7 +233,7 @@ const CardContent = ({
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialogOverlay>
-                    </AlertDialog> */}
+                    </AlertDialog>
                   </>
                 ) : null}
               </MenuList>
@@ -249,7 +254,26 @@ const CardContent = ({
         <Box marginTop={2}>
           <Grid templateColumns="repeat(3, 1fr)" gap={6}>
             <GridItem display="inline-flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegHeart} />
+              {likeStatus ? (
+                <Icon
+                  boxSize={6}
+                  as={AiFillHeart}
+                  onClick={() => {
+                    removeLikes();
+                    setLikeStatus(false);
+                  }}
+                />
+              ) : (
+                <Icon
+                  boxSize={6}
+                  as={FaRegHeart}
+                  onClick={() => {
+                    addLikes();
+                    setLikeStatus(true);
+                  }}
+                />
+              )}
+
               <Text paddingLeft="2">{numberOfLikes}</Text>
             </GridItem>
 
