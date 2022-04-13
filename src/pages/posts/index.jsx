@@ -1,14 +1,20 @@
 import CardContent from "../../components/ContentCard";
-import { Box, useToast } from "@chakra-ui/react";
+import { Box, Spinner, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import requiresAuth from "../../lib/requiresAuth";
 import { useSelector } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const HomePage = () => {
   const [contentList, setContentList] = useState([]);
+  const [noMore, setNoMore] = useState(true);
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
+  const [page, setPage] = useState(1);
+  const [dataLength, setDataLength] = useState(0);
+
+  const maxPostsPerPage = 5;
 
   // get post content data from api
   const fetchContentList = async () => {
@@ -17,11 +23,15 @@ const HomePage = () => {
         params: {
           _sortBy: "createdAt",
           _sortDir: "DESC",
+          _limit: maxPostsPerPage,
+          _page: page,
         },
       });
 
-      setContentList(res.data.result.rows);
-    } catch (error) {
+      setDataLength(res.data.result.count);
+      setContentList((prevPosts) => [...prevPosts, ...res.data.result.rows]);
+    } catch (err) {
+      console.log(err);
       toast({
         title: "Fetch data failed",
         description: "There is an error at the server",
@@ -48,6 +58,7 @@ const HomePage = () => {
           <CardContent
             username={val?.user_posts?.username}
             caption={val?.caption}
+            avatar={val?.user_posts?.profile_picture}
             imageUrl={val?.image_url}
             location={val?.location}
             numberOfLikes={val?.like_count}
@@ -64,6 +75,10 @@ const HomePage = () => {
         );
       });
     }
+  };
+
+  const fetchNextPage = () => {
+    setPage(page + 1);
   };
 
   const addLikes = async (postId, userId) => {
@@ -102,9 +117,31 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchContentList();
-  }, []);
+    if (contentList.length < dataLength) {
+      console.log("masuk");
+      setNoMore(false);
+    }
+  }, [page]);
 
-  return <Box>{renderContentList()}</Box>;
+  return (
+    <InfiniteScroll
+      dataLength={contentList.length}
+      next={fetchNextPage}
+      hasMore={noMore}
+      loader={
+        <p style={{ textAlign: "center" }}>
+          <Spinner />
+        </p>
+      }
+      endMessage={
+        <p style={{ textAlign: "center" }}>
+          <b>Yay! You have seen it all</b>
+        </p>
+      }
+    >
+      <Box>{renderContentList()}</Box>
+    </InfiniteScroll>
+  );
 };
 
 // authorize for user must login for access this page

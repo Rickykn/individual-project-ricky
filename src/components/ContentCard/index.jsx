@@ -42,7 +42,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import React, { useState } from "react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 
 const CardContent = ({
   username,
@@ -51,6 +51,7 @@ const CardContent = ({
   location,
   numberOfLikes,
   id,
+  avatar,
   user_id,
   user_like,
   addLikes,
@@ -60,6 +61,7 @@ const CardContent = ({
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [likeStatus, setLikeStatus] = useState(user_like);
+
   const cancelRef = React.useRef();
 
   const refreshPage = () => {
@@ -143,7 +145,7 @@ const CardContent = ({
           marginBottom={2}
         >
           <Box display="inline-flex">
-            <Avatar size="md" />
+            <Avatar size="md" src={avatar} />
             <Box paddingX="3">
               <Text fontSize="lg">{username}</Text>
               <Text fontSize="sm" color="gray.500">
@@ -257,6 +259,7 @@ const CardContent = ({
               {likeStatus ? (
                 <Icon
                   boxSize={6}
+                  sx={{ _hover: { cursor: "pointer" } }}
                   as={AiFillHeart}
                   onClick={() => {
                     removeLikes();
@@ -267,6 +270,7 @@ const CardContent = ({
                 <Icon
                   boxSize={6}
                   as={FaRegHeart}
+                  sx={{ _hover: { cursor: "pointer" } }}
                   onClick={() => {
                     addLikes();
                     setLikeStatus(true);

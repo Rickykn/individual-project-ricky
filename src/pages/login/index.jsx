@@ -23,6 +23,7 @@ import jsCookie from "js-cookie";
 import * as Yup from "yup";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -151,6 +152,11 @@ const LoginPage = () => {
                 <Box>
                   <ChakraLink>Forgot your password?</ChakraLink>
                 </Box>
+                <Link href="/register">
+                  <Box>
+                    <ChakraLink>Dont have a account?</ChakraLink>
+                  </Box>
+                </Link>
               </Stack>
 
               <Button
