@@ -59,8 +59,18 @@ const CardContent = ({
 }) => {
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [likeStatus, setLikeStatus] = useState(user_like);
+  const {
+    isOpen: isDelete,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isEdit,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
 
   const cancelRef = React.useRef();
 
@@ -68,6 +78,7 @@ const CardContent = ({
     window.location.reload(false);
   };
 
+  //delete post by id post
   const deletePost = async () => {
     try {
       await axiosInstance.delete(`/posts/${id}`);
@@ -79,7 +90,8 @@ const CardContent = ({
         isClosable: true,
         position: "top-right",
       });
-      onClose();
+      onDeleteClose();
+      refreshPage();
     } catch (err) {
       toast({
         title: "Fetch data failed",
@@ -92,6 +104,7 @@ const CardContent = ({
     }
   };
 
+  //edit post caption by id post
   const editPost = async (values) => {
     try {
       const newCaption = {
@@ -106,7 +119,7 @@ const CardContent = ({
         isClosable: true,
         position: "top-right",
       });
-      onClose();
+      onEditClose();
       refreshPage();
     } catch (err) {
       console.log(err);
@@ -162,8 +175,8 @@ const CardContent = ({
                 </Link>
                 {user_id === authSelector.id ? (
                   <>
-                    {/* <MenuItem onClick={onOpen}>Edit Post</MenuItem>
-                    <Modal isOpen={isOpen} onClose={onClose}>
+                    <MenuItem onClick={onEditOpen}>Edit Post</MenuItem>
+                    <Modal isOpen={isEdit} onClose={onEditClose}>
                       <ModalOverlay>
                         <ModalContent>
                           <ModalHeader>Edit Your Post</ModalHeader>
@@ -191,7 +204,11 @@ const CardContent = ({
                             </form>
                           </ModalBody>
                           <ModalFooter>
-                            <Button variant="ghost" mr={3} onClick={onClose}>
+                            <Button
+                              variant="ghost"
+                              mr={3}
+                              onClick={onEditClose}
+                            >
                               Cancel
                             </Button>
                             <Button
@@ -203,13 +220,13 @@ const CardContent = ({
                           </ModalFooter>
                         </ModalContent>
                       </ModalOverlay>
-                    </Modal> */}
+                    </Modal>
 
-                    <MenuItem onClick={onOpen}>Delete Post</MenuItem>
+                    <MenuItem onClick={onDeleteOpen}>Delete Post</MenuItem>
                     <AlertDialog
-                      isOpen={isOpen}
+                      isOpen={isDelete}
                       leastDestructiveRef={cancelRef}
-                      onClose={onClose}
+                      onClose={onDeleteClose}
                     >
                       <AlertDialogOverlay>
                         <AlertDialogContent>
@@ -222,7 +239,7 @@ const CardContent = ({
                           </AlertDialogBody>
 
                           <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={onClose}>
+                            <Button ref={cancelRef} onClick={onDeleteClose}>
                               Cancel
                             </Button>
                             <Button

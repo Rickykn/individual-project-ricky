@@ -8,7 +8,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const HomePage = () => {
   const [contentList, setContentList] = useState([]);
-  const [noMore, setNoMore] = useState(true);
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
   const [page, setPage] = useState(1);
@@ -66,10 +65,10 @@ const HomePage = () => {
             user_id={val?.user_id}
             user_like={like_status}
             addLikes={() => {
-              addLikes(val?.id, authSelector.id);
+              addLikes(val?.id, authSelector.id, idx);
             }}
             removeLikes={() => {
-              removesLikes(val?.id, authSelector.id);
+              removesLikes(val?.id, authSelector.id, idx);
             }}
           />
         );
@@ -78,13 +77,17 @@ const HomePage = () => {
   };
 
   const fetchNextPage = () => {
-    setPage(page + 1);
+    if (page < Math.ceil(dataLength / maxPostsPerPage)) {
+      setPage(page + 1);
+    }
   };
 
-  const addLikes = async (postId, userId) => {
+  const addLikes = async (postId, userId, idx) => {
     try {
       await axiosInstance.post(`/posts/${postId}/likes/${userId}`);
-      fetchContentList();
+      let newArr = [...contentList];
+      newArr[idx].like_count++;
+      setContentList(newArr);
     } catch (err) {
       console.log(err);
       toast({
@@ -98,10 +101,12 @@ const HomePage = () => {
     }
   };
 
-  const removesLikes = async (postId, userId) => {
+  const removesLikes = async (postId, userId, idx) => {
     try {
       await axiosInstance.delete(`/posts/${postId}/likes/${userId}`);
-      fetchContentList();
+      let newArr = [...contentList];
+      newArr[idx].like_count--;
+      setContentList(newArr);
     } catch (err) {
       console.log(err);
       toast({
@@ -110,24 +115,20 @@ const HomePage = () => {
         status: "error",
         duration: 4000,
         isClosable: true,
-        position: "top",
+        position: "top-right",
       });
     }
   };
 
   useEffect(() => {
     fetchContentList();
-    if (contentList.length < dataLength) {
-      console.log("masuk");
-      setNoMore(false);
-    }
   }, [page]);
 
   return (
     <InfiniteScroll
       dataLength={contentList.length}
       next={fetchNextPage}
-      hasMore={noMore}
+      hasMore={page < Math.ceil(dataLength / maxPostsPerPage)}
       loader={
         <p style={{ textAlign: "center" }}>
           <Spinner />
