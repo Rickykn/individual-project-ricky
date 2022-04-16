@@ -216,7 +216,7 @@ const Navbar = () => {
               </Box>
             </MenuButton>
             <MenuList>
-              <Link href="/myprofile">
+              <Link href={`/myprofile/${authSelector.id}`}>
                 <MenuItem>My Profile</MenuItem>
               </Link>
               <MenuItem onClick={logoutHandlerBtn}>Logout</MenuItem>
