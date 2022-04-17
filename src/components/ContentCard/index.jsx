@@ -34,7 +34,6 @@ import {
   FormHelperText,
   Input,
 } from "@chakra-ui/react";
-import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
 import { axiosInstance } from "../../configs/api";
 import { BsThreeDots } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -42,7 +41,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import React, { useState } from "react";
-import { AiFillHeart } from "react-icons/ai";
+import moment from "moment";
 
 const CardContent = ({
   username,
@@ -53,13 +52,10 @@ const CardContent = ({
   id,
   avatar,
   user_id,
-  user_like,
-  addLikes,
-  removeLikes,
+  date,
 }) => {
   const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
-  const [likeStatus, setLikeStatus] = useState(user_like);
   const {
     isOpen: isDelete,
     onOpen: onDeleteOpen,
@@ -271,41 +267,8 @@ const CardContent = ({
 
         {/* Action */}
         <Box marginTop={2}>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-            <GridItem display="inline-flex" justifyContent="center">
-              {likeStatus ? (
-                <Icon
-                  boxSize={6}
-                  sx={{ _hover: { cursor: "pointer" } }}
-                  as={AiFillHeart}
-                  onClick={() => {
-                    removeLikes();
-                    setLikeStatus(false);
-                  }}
-                />
-              ) : (
-                <Icon
-                  boxSize={6}
-                  as={FaRegHeart}
-                  sx={{ _hover: { cursor: "pointer" } }}
-                  onClick={() => {
-                    addLikes();
-                    setLikeStatus(true);
-                  }}
-                />
-              )}
-
-              <Text paddingLeft="2">{numberOfLikes}</Text>
-            </GridItem>
-
-            <GridItem paddingLeft="5" display="flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegCommentDots} />
-            </GridItem>
-
-            <GridItem paddingLeft="5" display="flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegShareSquare} />
-            </GridItem>
-          </Grid>
+          <Text> {moment(date).format("MMM DD, YYYY")}</Text>
+          <Text fontWeight="bold">{numberOfLikes} Likes</Text>
         </Box>
 
         {/* caption */}

@@ -70,6 +70,7 @@ const HomePage = () => {
             removeLikes={() => {
               removesLikes(val?.id, authSelector.id, idx);
             }}
+            date={val?.createdAt}
           />
         );
       });

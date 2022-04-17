@@ -24,8 +24,8 @@ import { useSelector } from "react-redux";
 import requiresAuth from "../../lib/requiresAuth";
 import { FaEdit } from "react-icons/fa";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useEffect, useRef, useState } from "react";
+
+import { useRef, useState } from "react";
 import { axiosInstance } from "../../configs/api";
 
 const MyProfile = ({ data }) => {
@@ -50,7 +50,7 @@ const MyProfile = ({ data }) => {
     formData.append("profile_image_file", selectedFile);
 
     try {
-      const edit = await axiosInstance.patch(`/users`, formData);
+      await axiosInstance.patch(`/users`, formData);
       toast({
         title: "Edited Profle",
         description: "Profile updated!!",
@@ -60,7 +60,6 @@ const MyProfile = ({ data }) => {
         position: "top-right",
       });
       onClose();
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

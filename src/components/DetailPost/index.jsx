@@ -21,6 +21,7 @@ import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { AiFillHeart } from "react-icons/ai";
 
 const DetailPost = ({
   username,
@@ -29,9 +30,14 @@ const DetailPost = ({
   location,
   numberOfLikes,
   id,
+  avatar,
+  user_like,
+  addLikes,
+  removeLikes,
 }) => {
   const [comments, setComments] = useState([]);
   const toast = useToast();
+  const [likeStatus, setLikeStatus] = useState(user_like);
 
   // get comment pagination from api
   const fetchAllComment = async () => {
@@ -132,7 +138,7 @@ const DetailPost = ({
           marginBottom={2}
         >
           <Box display="inline-flex">
-            <Avatar size="md" />
+            <Avatar size="md" src={avatar} />
             <Box paddingX="3">
               <Text fontSize="lg">{username}</Text>
               <Text fontSize="sm" color="gray.500">
@@ -153,7 +159,27 @@ const DetailPost = ({
         <Box marginTop={2}>
           <Grid templateColumns="repeat(3, 1fr)" gap={6}>
             <GridItem display="inline-flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegHeart} />
+              {likeStatus ? (
+                <Icon
+                  boxSize={6}
+                  sx={{ _hover: { cursor: "pointer" } }}
+                  as={AiFillHeart}
+                  onClick={() => {
+                    removeLikes();
+                    setLikeStatus(false);
+                  }}
+                />
+              ) : (
+                <Icon
+                  boxSize={6}
+                  as={FaRegHeart}
+                  sx={{ _hover: { cursor: "pointer" } }}
+                  onClick={() => {
+                    addLikes();
+                    setLikeStatus(true);
+                  }}
+                />
+              )}
               <Text paddingLeft="2">{numberOfLikes}</Text>
             </GridItem>
 
