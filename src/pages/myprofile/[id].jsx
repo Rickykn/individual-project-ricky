@@ -45,7 +45,10 @@ const MyProfile = ({ userDetail }) => {
     const formData = new FormData();
     const { username, fullname, bio } = formik.values;
 
-    formData.append("username", username);
+    if (username !== data.username) {
+      formData.append("username", username);
+    }
+
     formData.append("fullname", fullname);
     formData.append("bio", bio);
     formData.append("profile_image_file", selectedFile);

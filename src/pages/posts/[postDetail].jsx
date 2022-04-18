@@ -30,7 +30,7 @@ const PostDetail = ({ postDetailData }) => {
     }
   };
 
-  const removesLikes = async (postId, userId, idx) => {
+  const removesLikes = async (postId, userId) => {
     try {
       await axiosInstance.delete(`/posts/${postId}/likes/${userId}`);
       let newArr = { ...data };
@@ -81,7 +81,6 @@ const PostDetail = ({ postDetailData }) => {
 export const getServerSideProps = requiresAuth(async (context) => {
   try {
     const postId = context.params.postDetail;
-    const token = context.req.cookies.auth_token;
 
     const res = await axios.get(`http://localhost:2000/posts/${postId}`, {
       headers: {
