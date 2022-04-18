@@ -20,20 +20,21 @@ import {
   FormHelperText,
   Button,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
 import requiresAuth from "../../lib/requiresAuth";
 import { FaEdit } from "react-icons/fa";
 import { useFormik } from "formik";
-
 import { useRef, useState } from "react";
 import { axiosInstance } from "../../configs/api";
+import { useDispatch } from "react-redux";
+import auth_types from "../../redux/types/auth";
 
-const MyProfile = ({ data }) => {
-  const authSelector = useSelector((state) => state.auth);
+const MyProfile = ({ userDetail }) => {
+  const [data, setData] = useState(userDetail);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const inputFileRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const toast = useToast();
+  const dispatch = useDispatch();
 
   const handleFile = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -50,7 +51,14 @@ const MyProfile = ({ data }) => {
     formData.append("profile_image_file", selectedFile);
 
     try {
-      await axiosInstance.patch(`/users`, formData);
+      const res = await axiosInstance.patch(`/users`, formData);
+      dispatch({
+        type: auth_types.LOGIN_USER,
+        payload: res.data.result,
+      });
+
+      const newArr = { ...data, ...res.data.result };
+      setData(newArr);
       toast({
         title: "Edited Profle",
         description: "Profile updated!!",
@@ -88,13 +96,13 @@ const MyProfile = ({ data }) => {
       >
         <Box display="flex" justifyContent="space-between" padding="5">
           <Box>
-            <Avatar src={authSelector.avatar} size="2xl"></Avatar>
+            <Avatar src={data.profile_picture} size="2xl"></Avatar>
             <Box display="inline-block" paddingLeft="16">
-              <Text fontSize="3xl">{authSelector.username}</Text>
+              <Text fontSize="3xl">{data.username}</Text>
               <Text paddingTop="3" fontWeight="bold">
-                {authSelector.full_name}
+                {data.fullname}
               </Text>
-              <Text paddingTop="3">{authSelector.email}</Text>
+              <Text paddingTop="3">{data.email}</Text>
             </Box>
           </Box>
 
@@ -177,7 +185,7 @@ const MyProfile = ({ data }) => {
           </Modal>
         </Box>
         <Text paddingTop="3" textAlign="center">
-          {authSelector.bio}
+          {data.bio}
         </Text>
 
         <Divider orientation="horizontal" variant="solid" marginTop="3" />
@@ -198,7 +206,7 @@ export const getServerSideProps = requiresAuth(async (context) => {
 
     return {
       props: {
-        data: res.data.result,
+        userDetail: res.data.result,
       },
     };
   } catch (err) {
