@@ -38,19 +38,25 @@ const DetailPost = ({
   const [comments, setComments] = useState([]);
   const toast = useToast();
   const [likeStatus, setLikeStatus] = useState(user_like);
+  const maxCommentPerPage = 5;
+  const [page, setPage] = useState(1);
+  const [dataLength, setDataLength] = useState(0);
 
   // get comment pagination from api
   const fetchAllComment = async () => {
     try {
       const res = await axiosInstance.get(`/comments/${id}`, {
         params: {
-          _limit: 5,
+          _limit: maxCommentPerPage,
           _sortBy: "createdAt",
           _sortDir: "DESC",
+          _page: page,
         },
       });
       // console.log(res.data.result);
-      setComments(res.data.result.rows);
+      // setComments(res.data.result.rows);
+      setDataLength(res.data.result.count);
+      setComments((prevComment) => [...prevComment, ...res.data.result.rows]);
     } catch (error) {
       toast({
         title: "Fetch data failed",
@@ -70,6 +76,7 @@ const DetailPost = ({
         <Comment
           username={val?.User?.username}
           content={val?.comment_content}
+          date={val?.createdat}
         />
       );
     });
@@ -83,7 +90,7 @@ const DetailPost = ({
         post_id: id,
       };
 
-      await axiosInstance.post("/comments", newComment);
+      const res = await axiosInstance.post("/comments", newComment);
       toast({
         title: "Added Comment",
         description: "Success added comment! ",
@@ -92,10 +99,18 @@ const DetailPost = ({
         isClosable: true,
         position: "top-right",
       });
-      fetchAllComment();
+      // fetchAllComment();
       formik.setFieldValue("comment", "");
+      // let newArr = [...comments, ...res.data.result];
+      setComments((prevComment) => [res.data.result, ...prevComment]);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const fetchNextPage = () => {
+    if (page < Math.ceil(dataLength / maxCommentPerPage)) {
+      setPage(page + 1);
     }
   };
 
@@ -115,7 +130,7 @@ const DetailPost = ({
 
   useEffect(() => {
     fetchAllComment();
-  }, []);
+  }, [page]);
 
   return (
     <Flex justifyContent="center">
@@ -157,7 +172,7 @@ const DetailPost = ({
 
         {/* Action */}
         <Box marginTop={2}>
-          <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
             <GridItem display="inline-flex" justifyContent="center">
               {likeStatus ? (
                 <Icon
@@ -181,10 +196,6 @@ const DetailPost = ({
                 />
               )}
               <Text paddingLeft="2">{numberOfLikes}</Text>
-            </GridItem>
-
-            <GridItem paddingLeft="5" display="flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegCommentDots} />
             </GridItem>
 
             <GridItem paddingLeft="5" display="flex" justifyContent="center">
@@ -235,6 +246,17 @@ const DetailPost = ({
             </FormControl>
           </Box>
           {renderComment()}
+          {comments.length ? (
+            <Text
+              fontSize="sm"
+              sx={{ _hover: { cursor: "pointer" } }}
+              onClick={fetchNextPage}
+            >
+              See More Comment
+            </Text>
+          ) : (
+            <Text>No Comments</Text>
+          )}
         </Box>
       </Box>
     </Flex>

@@ -14,8 +14,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { axiosInstance } from "../../configs/api";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const RegisterPage = () => {
+  const authSelector = useSelector((state) => state.auth);
   const toast = useToast();
   const Router = useRouter();
   const registerBtn = async (values) => {
@@ -69,6 +72,12 @@ const RegisterPage = () => {
     validateOnChange: false,
     onSubmit: registerBtn,
   });
+
+  useEffect(() => {
+    if (authSelector.id) {
+      Router.push("/posts");
+    }
+  }, [authSelector.id]);
 
   return (
     <Flex minHeight="75vh" align="center" justifyContent="center">
