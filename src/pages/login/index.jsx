@@ -37,7 +37,7 @@ const LoginPage = () => {
   const loginHandleBtn = async (values) => {
     try {
       const res = await axiosInstance.post("/auth/login", {
-        username: values.username,
+        credential: values.username,
         password: values.password,
       });
 
