@@ -5,8 +5,6 @@ import {
   Flex,
   Image,
   Icon,
-  Grid,
-  GridItem,
   useToast,
   AspectRatio,
   Menu,

@@ -29,7 +29,7 @@ const HomePage = () => {
       setDataLength(res.data.result.count);
       setContentList((prevPosts) => [...prevPosts, ...res.data.result.rows]);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
       toast({
         title: "Fetch data failed",
         description: "There is an error at the server",
