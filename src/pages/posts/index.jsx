@@ -3,7 +3,6 @@ import { Box, Spinner, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import requiresAuth from "../../lib/requiresAuth";
-import { useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const HomePage = () => {

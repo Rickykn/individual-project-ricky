@@ -152,7 +152,19 @@ const CardContent = ({
           marginBottom={2}
         >
           <Box display="inline-flex">
-            <Avatar size="md" src={avatar} />
+            <Link
+              href={
+                authSelector.id === user_id
+                  ? `myprofile/${user_id}`
+                  : `userprofile/${user_id}`
+              }
+            >
+              <Avatar
+                size="md"
+                src={avatar}
+                sx={{ _hover: { cursor: "pointer" } }}
+              />
+            </Link>
             <Box paddingX="3">
               <Text fontSize="lg">{username}</Text>
               <Text fontSize="sm" color="gray.500">

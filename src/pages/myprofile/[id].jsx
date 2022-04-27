@@ -235,7 +235,11 @@ export const getServerSideProps = requiresAuth(async (context) => {
   try {
     const id = context.params.id;
 
-    const res = await axiosInstance.get(`/users/${id}`);
+    const res = await axiosInstance.get(`/users`, {
+      params: {
+        id,
+      },
+    });
 
     return {
       props: {
