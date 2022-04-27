@@ -86,6 +86,23 @@ const MyProfile = ({ userDetail }) => {
     onSubmit: editProfileHandler,
   });
 
+  const resendEmailHandler = async () => {
+    try {
+      alert("test");
+      await axiosInstance.post("/auth/resend-verification");
+      toast({
+        title: "Resend Email Verification",
+        description: "Please check your email for verification account",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Flex align="center" justifyContent="center">
       <Box
@@ -110,16 +127,29 @@ const MyProfile = ({ userDetail }) => {
           </Box>
 
           <Box>
-            <Icon
-              boxSize={6}
-              as={FaEdit}
-              sx={{
-                _hover: {
-                  cursor: "pointer",
-                },
-              }}
-              onClick={onOpen}
-            />
+            {data.is_verified ? (
+              <Icon
+                boxSize={6}
+                as={FaEdit}
+                sx={{
+                  _hover: {
+                    cursor: "pointer",
+                  },
+                }}
+                onClick={onOpen}
+              />
+            ) : (
+              <>
+                <Text>Please verify your account</Text>
+                <Button
+                  onClick={resendEmailHandler}
+                  colorScheme="teal"
+                  size="xs"
+                >
+                  Resend Email
+                </Button>
+              </>
+            )}
           </Box>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
