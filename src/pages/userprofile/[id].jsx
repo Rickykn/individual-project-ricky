@@ -1,25 +1,4 @@
-import {
-  Text,
-  Flex,
-  Box,
-  Avatar,
-  Divider,
-  Icon,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
-  useToast,
-  FormHelperText,
-  Button,
-} from "@chakra-ui/react";
+import { Text, Flex, Box, Avatar, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../configs/api";

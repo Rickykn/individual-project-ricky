@@ -19,11 +19,15 @@ import {
   useToast,
   FormHelperText,
   Button,
+  Image,
+  Grid,
+  GridItem,
+  Center,
 } from "@chakra-ui/react";
 import requiresAuth from "../../lib/requiresAuth";
 import { FaEdit } from "react-icons/fa";
 import { useFormik } from "formik";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../configs/api";
 import { useDispatch } from "react-redux";
 import auth_types from "../../redux/types/auth";
@@ -33,6 +37,9 @@ const MyProfile = ({ userDetail }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const inputFileRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [userPostData, setUserPostData] = useState([]);
+  const [userLikeData, setUserLikeData] = useState([]);
+  const [renderList, setRenderList] = useState(true);
   const toast = useToast();
   const dispatch = useDispatch();
 
@@ -76,6 +83,65 @@ const MyProfile = ({ userDetail }) => {
     }
   };
 
+  const fetchUserPostData = async () => {
+    try {
+      const res = await axiosInstance.get("/users/user-post", {
+        params: { id: data.id },
+      });
+
+      setUserPostData(res.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const fetchUserLikeData = async () => {
+    try {
+      const res = await axiosInstance.get("/users/user-like", {
+        params: { id: data.id },
+      });
+      console.log(res.data.result);
+      setUserLikeData(res.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderUserLikeData = () => {
+    if (userLikeData.length) {
+      return userLikeData.map((val) => {
+        return (
+          <GridItem w="100%">
+            <Image
+              boxSize="150px"
+              src={val?.Post?.image_url}
+              fallbackSrc="https://via.placeholder.com/250"
+              m={1}
+              rounded="20px"
+            />
+          </GridItem>
+        );
+      });
+    }
+  };
+
+  const renderUserPostData = () => {
+    if (userPostData.length) {
+      return userPostData.map((val) => {
+        return (
+          <GridItem w="100%">
+            <Image
+              boxSize="150px"
+              src={val?.image_url}
+              fallbackSrc="https://via.placeholder.com/250"
+              m={1}
+              rounded="20px"
+            />
+          </GridItem>
+        );
+      });
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       username: data.username,
@@ -102,6 +168,11 @@ const MyProfile = ({ userDetail }) => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    fetchUserPostData();
+    fetchUserLikeData();
+  }, []);
 
   return (
     <Flex align="center" justifyContent="center">
@@ -223,9 +294,24 @@ const MyProfile = ({ userDetail }) => {
 
         <Divider orientation="horizontal" variant="solid" marginTop="3" />
         <Box marginTop="3" display="flex" justifyContent="space-around">
-          <Text>POST</Text>
-          <Text>LIKES</Text>
+          <Text
+            onClick={() => setRenderList(true)}
+            sx={{ _hover: { cursor: "pointer" } }}
+          >
+            POST
+          </Text>
+          <Text
+            onClick={() => setRenderList(false)}
+            sx={{ _hover: { cursor: "pointer" } }}
+          >
+            LIKES
+          </Text>
         </Box>
+        <Center>
+          <Grid mt={4} templateColumns="repeat(4, 1fr)" gap={4}>
+            {renderList ? renderUserPostData() : renderUserLikeData()}
+          </Grid>
+        </Center>
       </Box>
     </Flex>
   );

@@ -43,7 +43,7 @@ const RegisterPage = () => {
         duration: 2000,
         position: "top-right",
       });
-
+      formik.setSubmitting(false);
       Router.push("/login");
     } catch (err) {
       console.log(Object.keys(err));
@@ -54,6 +54,7 @@ const RegisterPage = () => {
         duration: 2000,
         position: "top-right",
       });
+      formik.setSubmitting(false);
     }
   };
   const formik = useFormik({
@@ -66,7 +67,12 @@ const RegisterPage = () => {
     validationSchema: Yup.object().shape({
       username: Yup.string().required("This field is required"),
       email: Yup.string().required("This field is required"),
-      password: Yup.string().required("This field is required"),
+      password: Yup.string()
+        .required("This field is required")
+        .matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+        ),
       repeatPassword: Yup.string().required("This field is required"),
     }),
     validateOnChange: false,
@@ -150,6 +156,7 @@ const RegisterPage = () => {
                 mt={4}
                 colorScheme="blue"
                 type="submit"
+                disabled={formik.isSubmitting}
               >
                 Sign Up
               </Button>
