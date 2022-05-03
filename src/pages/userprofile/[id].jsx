@@ -1,4 +1,14 @@
-import { Text, Flex, Box, Avatar, Divider } from "@chakra-ui/react";
+import {
+  Text,
+  Flex,
+  Box,
+  Avatar,
+  Divider,
+  GridItem,
+  Center,
+  Grid,
+  Image,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../configs/api";
@@ -6,9 +16,11 @@ import { axiosInstance } from "../../configs/api";
 const UserProfile = () => {
   const [userData, setUserData] = useState({});
   const router = useRouter();
+  const [userPostData, setUserPostData] = useState([]);
+  const [userLikeData, setUserLikeData] = useState([]);
+  const [renderList, setRenderList] = useState(true);
   const fetchUserProfile = async () => {
     try {
-      console.log(router.query.id);
       const res = await axiosInstance.get(`/users`, {
         params: {
           id: router.query.id,
@@ -20,9 +32,70 @@ const UserProfile = () => {
     }
   };
   console.log(userData);
+  const fetchUserPostData = async () => {
+    try {
+      const res = await axiosInstance.get("/users/user-post", {
+        params: { id: router.query.id },
+      });
+
+      setUserPostData(res.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const fetchUserLikeData = async () => {
+    try {
+      const res = await axiosInstance.get("/users/user-like", {
+        params: { id: router.query.id },
+      });
+
+      setUserLikeData(res.data.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderUserLikeData = () => {
+    if (userLikeData.length) {
+      return userLikeData.map((val) => {
+        return (
+          <GridItem w="100%">
+            <Image
+              boxSize="150px"
+              src={val?.Post?.image_url}
+              fallbackSrc="https://via.placeholder.com/250"
+              m={1}
+              rounded="20px"
+            />
+          </GridItem>
+        );
+      });
+    }
+  };
+
+  const renderUserPostData = () => {
+    if (userPostData.length) {
+      return userPostData.map((val) => {
+        return (
+          <GridItem w="100%">
+            <Image
+              boxSize="150px"
+              src={val?.image_url}
+              fallbackSrc="https://via.placeholder.com/250"
+              m={1}
+              rounded="20px"
+            />
+          </GridItem>
+        );
+      });
+    }
+  };
+
   useEffect(() => {
     if (router.isReady) {
       fetchUserProfile();
+      fetchUserPostData();
+      fetchUserLikeData();
     }
   }, [router.isReady]);
   return (
@@ -54,9 +127,24 @@ const UserProfile = () => {
 
         <Divider orientation="horizontal" variant="solid" marginTop="3" />
         <Box marginTop="3" display="flex" justifyContent="space-around">
-          <Text>POST</Text>
-          <Text>LIKES</Text>
+          <Text
+            onClick={() => setRenderList(true)}
+            sx={{ _hover: { cursor: "pointer" } }}
+          >
+            POST
+          </Text>
+          <Text
+            onClick={() => setRenderList(false)}
+            sx={{ _hover: { cursor: "pointer" } }}
+          >
+            LIKES
+          </Text>
         </Box>
+        <Center>
+          <Grid mt={4} templateColumns="repeat(4, 1fr)" gap={4}>
+            {renderList ? renderUserPostData() : renderUserLikeData()}
+          </Grid>
+        </Center>
       </Box>
     </Flex>
   );
