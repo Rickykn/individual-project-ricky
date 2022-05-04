@@ -66,7 +66,9 @@ const RegisterPage = () => {
     },
     validationSchema: Yup.object().shape({
       username: Yup.string().required("This field is required"),
-      email: Yup.string().required("This field is required"),
+      email: Yup.string()
+        .required("This field is required")
+        .email("Email is invalid"),
       password: Yup.string()
         .required("This field is required")
         .matches(
