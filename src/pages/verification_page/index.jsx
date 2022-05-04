@@ -1,7 +1,11 @@
-import { Text } from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 
 const VerificationPage = () => {
-  return <Text>INI VERIFICATION PAGE</Text>;
+  return (
+    <Center mt={50}>
+      <Text fontSize={20}>Congratulation you account in verified</Text>
+    </Center>
+  );
 };
 
 export default VerificationPage;
