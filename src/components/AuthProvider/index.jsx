@@ -13,6 +13,9 @@ const AuthProvider = ({ children }) => {
     if (userToken) {
       try {
         const userResponse = await axiosInstance.get("/auth/refresh-token");
+        if (!userResponse) {
+          throw new Error("User on deleted");
+        }
 
         jsCookie.set("auth_token", userResponse?.data?.result?.token || "");
 
