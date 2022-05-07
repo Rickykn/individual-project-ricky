@@ -150,7 +150,9 @@ const LoginPage = () => {
 
               <Stack isInline justifyContent="space-between" mt={5}>
                 <Box>
-                  <ChakraLink>Forgot your password?</ChakraLink>
+                  <Link href="/forgot_password">
+                    <ChakraLink>Forgot your password?</ChakraLink>
+                  </Link>
                 </Box>
                 <Link href="/register">
                   <Box>
