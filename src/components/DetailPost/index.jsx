@@ -252,7 +252,9 @@ const DetailPost = ({
               sx={{ _hover: { cursor: "pointer" } }}
               onClick={fetchNextPage}
             >
-              See More Comment
+              {page === Math.ceil(dataLength / maxCommentPerPage)
+                ? ""
+                : "See More Comment"}
             </Text>
           ) : (
             <Text>No Comments</Text>
