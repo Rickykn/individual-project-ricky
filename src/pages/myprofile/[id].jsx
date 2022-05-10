@@ -154,7 +154,6 @@ const MyProfile = ({ userDetail }) => {
 
   const resendEmailHandler = async () => {
     try {
-      alert("test");
       await axiosInstance.post("/auth/resend-verification");
       toast({
         title: "Resend Email Verification",

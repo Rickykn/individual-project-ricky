@@ -73,7 +73,7 @@ const RegisterPage = () => {
         .required("This field is required")
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-          "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+          "Your password weak,Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
         ),
       repeatPassword: Yup.string().required("This field is required"),
     }),
