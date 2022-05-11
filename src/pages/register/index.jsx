@@ -30,7 +30,7 @@ const RegisterPage = () => {
       };
 
       if (values.password !== values.repeatPassword) {
-        throw new Error("Must same password");
+        throw new Error("Password and repeat password must be same");
       }
 
       const res = await axiosInstance.post("/auth/register", newUser);
