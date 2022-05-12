@@ -174,33 +174,29 @@ const DetailPost = ({
         </AspectRatio>
 
         {/* Action */}
-        <Box marginTop={2}>
-          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            <GridItem display="inline-flex" justifyContent="center">
-              {likeStatus ? (
-                <Icon
-                  boxSize={6}
-                  sx={{ _hover: { cursor: "pointer" } }}
-                  as={AiFillHeart}
-                  onClick={() => {
-                    removeLikes();
-                    setLikeStatus(false);
-                  }}
-                />
-              ) : (
-                <Icon
-                  boxSize={6}
-                  as={FaRegHeart}
-                  sx={{ _hover: { cursor: "pointer" } }}
-                  onClick={() => {
-                    addLikes();
-                    setLikeStatus(true);
-                  }}
-                />
-              )}
-              <Text paddingLeft="2">{numberOfLikes}</Text>
-            </GridItem>
-          </Grid>
+        <Box marginTop={2} display="flex">
+          {likeStatus ? (
+            <Icon
+              boxSize={6}
+              sx={{ _hover: { cursor: "pointer" } }}
+              as={AiFillHeart}
+              onClick={() => {
+                removeLikes();
+                setLikeStatus(false);
+              }}
+            />
+          ) : (
+            <Icon
+              boxSize={6}
+              as={FaRegHeart}
+              sx={{ _hover: { cursor: "pointer" } }}
+              onClick={() => {
+                addLikes();
+                setLikeStatus(true);
+              }}
+            />
+          )}
+          <Text paddingLeft="2">{numberOfLikes}</Text>
         </Box>
 
         {/* caption */}
