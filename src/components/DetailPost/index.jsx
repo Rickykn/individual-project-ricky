@@ -14,14 +14,16 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { FaRegCommentDots, FaRegShareSquare, FaRegHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 import Comment from "../Comment";
 import { useState, useEffect } from "react";
 import { axiosInstance } from "../../configs/api";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AiFillHeart } from "react-icons/ai";
+import { useRouter } from "next/router";
 
 const DetailPost = ({
   username,
@@ -41,6 +43,7 @@ const DetailPost = ({
   const maxCommentPerPage = 5;
   const [page, setPage] = useState(1);
   const [dataLength, setDataLength] = useState(0);
+  const router = useRouter();
 
   // get comment pagination from api
   const fetchAllComment = async () => {
@@ -196,10 +199,6 @@ const DetailPost = ({
                 />
               )}
               <Text paddingLeft="2">{numberOfLikes}</Text>
-            </GridItem>
-
-            <GridItem paddingLeft="5" display="flex" justifyContent="center">
-              <Icon boxSize={6} as={FaRegShareSquare} />
             </GridItem>
           </Grid>
         </Box>
